@@ -148,8 +148,8 @@ Ext.onReady(function(){
       check_shapefile();
 
       var main_filename = base_file.getValue();
-      var extension_index = main_filename.search(/\.[A-Za-z]+$/i);
-      if (main_filename.search(/\.[A-Za-z]+$/i) != -1) {
+      var extension_index = main_filename.search(/\.\w+$/i);
+      if (extension_index != -1 && layer_name.getValue() == "") {
           layer_name.setValue(main_filename.substring(0,extension_index));
       }
     })
