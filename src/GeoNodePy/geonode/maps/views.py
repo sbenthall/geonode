@@ -1337,10 +1337,10 @@ def _metadata_search(query, start, limit, **kw):
 def search_result_detail(request):
     uuid = request.GET.get("uuid")
     csw = get_csw()
-    csw.getrecordbyid([uuid])
-    doc = csw._records.find(nspath('Record', namespaces['csw']))
+    csw.getrecordbyid([uuid], outputschema=namespaces["gmd"])
+    doc = csw._records.find(nspath('MD_Metadata', namespaces['gmd']))
     rec = _build_search_result(doc)
-    
+
     try:
         layer = Layer.objects.get(uuid=uuid)
         layer_is_remote = False
