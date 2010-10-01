@@ -1365,11 +1365,20 @@ def _build_search_result(doc):
     # Let owslib do some parsing for us...
     rec = CswRecord(doc)
     result = {}
-    result['title'] = rec.title
+
+    # pulling title from gmd document by xpath
+    result['title'] = doc.find('*/*/*/*/{%s}title/{%s}CharacterString' % (namespaces['gmd'], namespaces['gco'])).text
+
+    # legacy code that expects DC metadata. Can't find UUID in GMD doc??
     result['uuid'] = rec.identifier
-    result['abstract'] = rec.abstract
-    result['keywords'] = [x for x in rec.subjects if x]
+
+    # pulling abstract from gmd document
+    result['abstract'] = doc.find('*/*/{%s}abstract/{%s}CharacterString' % (namespaces['gmd'], namespaces['gco'])).text
+
+    # XXX think this doesn't work yet either.
+    result['keywords'] = doc.findall('*/*/{%s}descriptiveKeywords/*' % (namespaces['gmd']))
     result['detail'] = rec.uri or ''
+
 
     # XXX needs indexing ? how
     result['attribution'] = {'title': '', 'href': ''}
